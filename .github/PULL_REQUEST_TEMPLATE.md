@@ -28,9 +28,13 @@ Document how IBM Bob supported this change:
 List the commands or checks used to validate the change.
 
 ```bash
-npm install
-npm test
+cd finance-app
+npm ci
+npm run lint
+npm run typecheck
+npm test -- --runInBand
 npm run build
+npm audit --audit-level=high
 ```
 
 ## Feature Request Alignment

@@ -18,25 +18,38 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@499332a237ef2500c5e57d0b253c17849c290782
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: finance-app/package-lock.json
 
       - name: Install dependencies
-        run: npm install
+        working-directory: finance-app
+        run: npm ci
 
       - name: Lint
-        run: npm run lint --if-present
+        working-directory: finance-app
+        run: npm run lint
 
       - name: Test
-        run: npm test --if-present -- --runInBand
+        working-directory: finance-app
+        run: npm test -- --runInBand
+
+      - name: Typecheck
+        working-directory: finance-app
+        run: npm run typecheck
 
       - name: Build
-        run: npm run build --if-present
+        working-directory: finance-app
+        run: npm run build
+
+      - name: Audit dependencies
+        working-directory: finance-app
+        run: npm audit --audit-level=high
 
   bob-feature-flow:
     name: Bob-assisted feature workflow guidance
@@ -54,4 +67,3 @@ jobs:
           echo "4. Bob runs tests and build commands."
           echo "5. Bob pushes updates back to the branch for review."
           echo "6. A maintainer or external automation merges/closes the PR."
-
